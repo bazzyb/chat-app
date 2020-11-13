@@ -1,0 +1,4 @@
+
+Todo:
+  ☐ Make into a Flask/Django app
+  ☐ Pass username to server, initially so will show "[USERNAME] has (joined/left) chat"

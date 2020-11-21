@@ -1,4 +1,19 @@
 
 Todo:
+  ☐ Have user enter login, and maybe password, at start of client.py
+  ☐ Server will request username, and maybe password, at connection
+  ☐ It will go, conn -> S: Req Username -> C: Send Username -> S: Req Password -> C: Send Password
+  ☐ This happens instantly, as credentials entered by client before connection
+  ☐ Password is for if admin, or maybe all users
+  ☐ If password wrong, reject, and client closes
+  ☐ Maybe implement attempts, with ip or username
+  ☐ have type enums on both sides:
+      - username
+      - password
+      - message
+      - kick
+      - ban
+      - login || "success", "fail", "restricted"
+  ☐ Store history in local database, server has database, client has local database
+  ☐ Persistent users
   ☐ Make into a Flask/Django app
-  ☐ Pass username to server, initially so will show "[USERNAME] has (joined/left) chat"

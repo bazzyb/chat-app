@@ -14,11 +14,13 @@ mccabe==0.6.1
 packaging==20.4
 pluggy==0.13.1
 py==1.9.0
+pyasn1==0.4.8
 pycodestyle==2.6.0
 pycparser==2.20
 pyflakes==2.2.0
 pyparsing==2.4.7
 pytest==6.1.2
+rsa==4.6
 six==1.15.0
 toml==0.10.2
 Werkzeug==1.0.1

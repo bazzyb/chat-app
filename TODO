@@ -4,3 +4,4 @@ Todo:
   ☐ Password is for if admin, or maybe all users
   ☐ If password wrong, reject, and client closes
   ☐ Maybe implement attempts, with ip or username
+  ☐ Build tests

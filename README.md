@@ -1,22 +1,11 @@
 # python-chat-app
 
-https://stuvel.eu/python-rsa-doc/usage.html#generating-keys
+A simple terminal based chat app. 
+This is not a production project, it was simply used as a means to learn about sockets and encryption.
 
+I built this project initially to get a better understanding of how sockets worked, but it also ended up being a good introduction to message encryption. 
+It helped me understand the concept and purpose of asymmetric and symmetric keys, and how to handle securely passing a key, and sending encrypted messages. 
 
-CLIENT CONNECTS
-
-SERVER REQUESTS PUBLIC KEY
-CLIENT SENDS PUBLIC KEY
-
-SERVER SENDS SYM KEY
-CLIENT TELLS SERVER SYM KEY RECEIVED
-
-SERVER REQUESTS USERNAME
-CLIENT SENDS USERNAME
-
-IF ADMIN
-SERVER REQUESTS PASSWORDS
-CLIENT SENDS PASSWORDS
-
-SERVER TELLS CLIENT THEY HAVE CONNECTED
-CLIENT STARTS CHAT LOOP
+TO USE:
+Server - simply run python3 server.py. This will allow local connections to port 8004 currently
+Client - run python3 client.py, enter a username, and start chatting. 

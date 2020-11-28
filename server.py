@@ -2,10 +2,11 @@ import os
 import pickle
 import socket
 import threading
+import time
 from cryptography.fernet import Fernet
 
-from app.scripts import encryption
-from app.consts import MessageTypes
+from scripts import encryption
+from scripts.consts import MessageTypes
 
 # IP = socket.gethostbyname(socket.gethostname())
 IP = 'localhost'
@@ -23,11 +24,12 @@ class Server:
         self.server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.server.listen(5)
 
-    def broadcast(self, msg, address_key):
+    def broadcast(self, msg, address_key=None):
         for key, client in self.active_connections.items():
-            if key != address_key:
-                pass
-                # SEND MESSAGE
+            if not address_key or key != address_key:
+                encrypted_msg = self.encode_message(client['cipher'], msg)
+                msg_type = MessageTypes.MESSAGE if address_key else MessageTypes.SERVER_CLOSED
+                self.send_to_client(client['client'], MessageTypes.MESSAGE, payload=encrypted_msg)
 
     def get_clients(self):
         (client, address) = self.server.accept()
@@ -56,7 +58,12 @@ class Server:
             data = client.recv(1024)
 
             if not data:
-                self.broadcast('User has left the room.', address_key)
+                username = self.active_connections[address_key]['username']
+                username = username if username else 'User'
+                self.broadcast(
+                    f'[SERVER]: {username} has left the room.',
+                    address_key=address_key
+                )
                 del self.active_connections[address_key]
                 client.close()
                 break
@@ -82,10 +89,18 @@ class Server:
         elif data['type'] == MessageTypes.USERNAME:
             client_info['username'] = data['payload']
             client_info['logged_in'] = True
+            self.broadcast(
+                f'[SERVER]: {client_info["username"]} has joined the room.',
+                address_key=address_key
+            )
             self.send_to_client(client_info['client'], MessageTypes.CONNECTED)
 
         elif data['type'] == MessageTypes.MESSAGE:
-            self.decode_message(client_info, data['payload'])
+            msg = self.decode_message(client_info, data['payload'])
+            self.broadcast(
+                f'[{client_info["username"]}]: {msg}',
+                address_key=address_key
+            )
 
     def generate_sym_key(self, address_key, public_key, pub_key_hash):
         hash_matches = encryption.check_key_hash(pickle.dumps(public_key), pub_key_hash)
@@ -108,10 +123,14 @@ class Server:
             **kwargs
         }))
 
+    def encode_message(self, cipher, message):
+        msg = cipher.encrypt(pickle.dumps(message))
+        return msg
+
     def decode_message(self, client_info, message):
         cipher = client_info['cipher']
         msg = pickle.loads(cipher.decrypt(message))
-        print(f'[{client_info["username"]}]: {msg}')
+        return msg
 
     def run(self):
         print(f'Server running on {IP}:{PORT}')
@@ -121,7 +140,12 @@ class Server:
                 self.get_clients()
 
         except KeyboardInterrupt:
+            self.broadcast('Server closed')
             print('Closing Server')
+
+            while len(self.active_connections) > 0:
+                print(len(self.active_connections) > 0)
+                time.sleep(0.1)
 
         finally:
             self.server.close()

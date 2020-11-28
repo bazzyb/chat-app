@@ -1,17 +1,12 @@
 attrs==20.3.0
 autopep8==1.5.4
-cffi==1.14.3
-click==7.1.2
+cffi==1.14.4
 cryptography==3.2.1
 flake8==3.8.4
-Flask==1.1.2
-importlib-metadata==2.0.0
+importlib-metadata==3.1.0
 iniconfig==1.1.1
-itsdangerous==1.1.0
-Jinja2==2.11.2
-MarkupSafe==1.1.1
 mccabe==0.6.1
-packaging==20.4
+packaging==20.5
 pluggy==0.13.1
 py==1.9.0
 pyasn1==0.4.8
@@ -23,5 +18,4 @@ pytest==6.1.2
 rsa==4.6
 six==1.15.0
 toml==0.10.2
-Werkzeug==1.0.1
 zipp==3.4.0

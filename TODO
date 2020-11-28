@@ -1,13 +1,6 @@
 
 Todo:
-  ☐ Send encrypted messages to each user
   ☐ Close server gracefully
-  ☐ I know how to encrpyt and decrypt messages, but need to know secure way of recording keys
-  ☐ If not recording keys, how do I store message history, plain text, or some other encryption?
-  ☐ This happens instantly, as credentials entered by client before connection
   ☐ Password is for if admin, or maybe all users
   ☐ If password wrong, reject, and client closes
   ☐ Maybe implement attempts, with ip or username
-  ☐ Store history in local database, server has database, client has local database
-  ☐ Persistent users
-  ☐ Make into a Flask/Django app

@@ -5,9 +5,9 @@ import socket
 import threading
 from cryptography.fernet import Fernet
 
-from app.scripts import encryption
-from app.consts import MessageTypes
-from app.exceptions import ServerClosedError
+from scripts import encryption
+from scripts.consts import MessageTypes
+from scripts.exceptions import ServerClosedError
 
 # IP = socket.gethostbyname(socket.gethostname())
 IP = 'localhost'
@@ -30,9 +30,9 @@ class Client:
         self.key_hash = keys[2]
 
     def connect_to_server(self):
-        print('Connecting...')
+        print('[SERVER]: Connecting...')
         self.socket.connect((IP, PORT))
-        print('Connected')
+        print('[SERVER]: Connected')
 
     def handle_login(self):
         while not self.connected:
@@ -65,7 +65,7 @@ class Client:
             raise ServerClosedError
 
         else:
-            print('UNEXPECTED RESPONSE TYPE:')
+            print('[SERVER]: UNEXPECTED RESPONSE TYPE:')
             print(res)
 
     def _send_public_key(self):
@@ -113,13 +113,14 @@ class Client:
         res = pickle.loads(data)
 
         if res['type'] == MessageTypes.MESSAGE:
-            ('MESSAGE', res['payload'])
+            msg = self._decrypt_msg(res['payload'])
+            print(msg)
 
         elif res['type'] == MessageTypes.SERVER_CLOSED:
-            raise ServerClosedError
+            quit()
 
         else:
-            print('UNEXPECTED RESPONSE TYPE:')
+            print('[SERVER]: UNEXPECTED RESPONSE TYPE:')
             print(res)
 
     def chat_loop(self):
@@ -136,6 +137,10 @@ class Client:
         encrypted_msg = self.cipher.encrypt(pickle.dumps(msg))
         self.send_to_server(MessageTypes.MESSAGE, encrypted_msg)
 
+    def _decrypt_msg(self, msg):
+        msg = pickle.loads(self.cipher.decrypt(msg))
+        return msg
+
 
 if __name__ == '__main__':
     try:
@@ -143,12 +148,13 @@ if __name__ == '__main__':
         client = Client(nickname)
         client.handle_login()
 
-        print('Chat opened.')
+        os.system('clear')
+        print('[SERVER]: Chat opened.')
         client.start_message_listener()
         client.chat_loop()
 
     except ServerClosedError as err:
-        print(err)
+        client.socket.close()
     except ConnectionRefusedError:
         print('Server is not currently runnning.')
     except KeyboardInterrupt:

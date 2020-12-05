@@ -10,8 +10,8 @@ It led to me getting to grips with basic encryption (asymmetric and symmetric ke
 Uses the built in socket library, as well as the RSA and cryptography packages for encryption. 
 
 ### To Use:
-• Server - simply run python3 server.py. This will allow local connections to port 8004 currently
-• Client - run python3 client.py, enter a username, and start chatting. 
+Server - simply run python3 server.py. This will allow local connections to port 8004 currently
+Client - run python3 client.py, enter a username, and start chatting. 
 
 ## Flask Version
 
